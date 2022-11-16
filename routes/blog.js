@@ -1,6 +1,7 @@
 const router = require("express").Router()
 const { update, rawListeners } = require("../models/Blog")
 const Blog = require("../models/Blog")
+const getRelatedBlogs = require("../operations/getRelatedBlogs")
 
 
 // create a blog post 
@@ -33,12 +34,25 @@ router.put("/:blogId", async (req, res) => {
     }
 })
 
+
+
+
 // get blog post
 router.get("/find/:blogId", async (req, res) => {
 
     try {
-        const blog = await Blog.findOne({ _id: req.params.blogId })
-        res.status(201).json(blog)
+        // const blog = await Blog.findOne({ _id: req.params.blogId })
+        const title = req.params.blogId.replace(/-/g, " ") // send a dashed title to look good in url route
+        const blog = await Blog.findOne({ title: title })
+
+
+        // related blog with same topics 
+        const allBlog = await Blog.find({})
+        const relatedBlog = getRelatedBlogs(blog, allBlog)
+
+
+
+        res.status(201).json({ blog, relatedBlog })
 
     }
     catch (err) {

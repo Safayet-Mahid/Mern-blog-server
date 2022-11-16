@@ -31,7 +31,8 @@ router.post("/login", async (req, res) => {
         !user && res.status(404).json("User not found")
 
         if (user && typedPassword === user.password) {
-            return res.status(201).json(user)
+
+            return res.status(201).json({ id: user._id, username: user.username, email: user.email })
         } else {
             return res.status(401).json("password is incorrect")
         }
