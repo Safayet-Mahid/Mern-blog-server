@@ -4,6 +4,7 @@ const dotenv = require("dotenv")
 const mongoose = require("mongoose")
 const userRoute = require("./routes/user")
 const blogRoute = require("./routes/blog")
+const authorRoute = require("./routes/author")
 
 const app = express()
 const port = 5000
@@ -26,6 +27,9 @@ app.use("/api/user", userRoute)
 
 // blog 
 app.use("/api/blogs", blogRoute)
+
+//author 
+app.use("/author", authorRoute)
 
 
 app.get("/", (req, res) => {
