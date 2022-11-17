@@ -3,10 +3,11 @@ const getRelatedBlogs = (blog, allBlog) => {
 
     for (singleCategory of blog.category) {
 
-        matchedBlog.push(allBlog.find(sBlog => sBlog.category.includes(singleCategory)))
+        matchedBlog.push(...allBlog.filter(sBlog => sBlog.category.includes(singleCategory)))
     }
     const relatedBlog = [...new Set(matchedBlog)].filter(mB => mB.title !== blog.title)
     return relatedBlog;
+
 }
 
 module.exports = getRelatedBlogs
