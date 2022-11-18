@@ -14,10 +14,6 @@ const varifyToken = (req, res, next) => {
     }
 }
 
-// const varifyTokenAndAuthorization =(req,res,next)=>{
-//     varifyToken(req,res,()=>[
-//         if(req.user.id===re)
-//     ])
-// }
+
 
 module.exports = { varifyToken }

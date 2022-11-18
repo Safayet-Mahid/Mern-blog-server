@@ -20,7 +20,22 @@ const UserSchema = new mongoose.Schema(
         },
         img: { type: String },
         shortBio: { type: String },
-        intrests: { type: Array }
+        intrests: { type: Array },
+        followingList: [
+            {
+                _id: false,
+                name: { type: String },
+                id: { type: String }
+            }
+        ],
+        followerList: [
+
+            {
+                _id: false,
+                name: { type: String },
+                id: { type: String }
+            }
+        ],
 
     },
     {

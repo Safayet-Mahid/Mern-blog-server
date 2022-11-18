@@ -1,3 +1,7 @@
+const getRandomBlog = require("../operations/getRandomBlog")
+
+// finds other blogs with same categories 
+
 const getRelatedBlogs = (blog, allBlog) => {
     const matchedBlog = []
 
@@ -5,9 +9,16 @@ const getRelatedBlogs = (blog, allBlog) => {
 
         matchedBlog.push(...allBlog.filter(sBlog => sBlog.category.includes(singleCategory)))
     }
-    const relatedBlog = [...new Set(matchedBlog)].filter(mB => mB.title !== blog.title)
+
+    const randomRelatedBlog = getRandomBlog(matchedBlog)
+
+
+    const relatedBlog = [...new Set(randomRelatedBlog)].filter(mB => mB.title !== blog.title)
+
     return relatedBlog;
 
 }
+
+
 
 module.exports = getRelatedBlogs
