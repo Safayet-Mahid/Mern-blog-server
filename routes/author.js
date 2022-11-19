@@ -4,14 +4,16 @@ const Blog = require("../models/Blog")
 const User = require("../models/User")
 
 
-// author name must be sent as dashed 
-router.get("/:authorName", async (req, res) => {
-    const authorname = req.params.authorName.replace(/-/g, " ")
+// param named authorId from the blog object must be sent
+
+router.get("/:authorId", async (req, res) => {
+
     try {
-        // identifying an user as author 
-        const author = await User.findOne({ username: authorname })
+        const author = await User.findById(req.params.authorId)
+
         // blogs of the user as author 
         const blogs = await Blog.find({ author: author.username })
+
         res.status(200).json({ author, blogs })
     }
     catch (err) {

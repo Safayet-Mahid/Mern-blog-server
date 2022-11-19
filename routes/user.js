@@ -1,14 +1,14 @@
 const router = require("express").Router()
 const User = require("../models/User")
-const { varifyToken } = require("./varify")
+const { varifyToken, varifyAuthorization } = require("./varify")
 
 
 
-// add to following list
+// add to following list [which consequently update the follower list of the person who is being followed bty the user]
 
-// a query named operation must be sent to update intrests [ "follow" /"unfollow"]
+// a query named operation and a param name userId must be sent to update intrests [ "follow" /"unfollow"]
 
-router.put("/following", varifyToken, async (req, res) => {
+router.put("/:userId/following", varifyAuthorization, async (req, res) => {
 
     const operation = req.query.operation
 
@@ -60,9 +60,9 @@ router.put("/following", varifyToken, async (req, res) => {
 
 // update bookmarked blogs
 
-// a query named operation must be sent to update intrests [ "follow" /"unfollow"]
+// a query named operation and a param name userId must be sent to update intrests [ "follow" /"unfollow"]
 
-router.put("/bookmark", varifyToken, async (req, res) => {
+router.put("/:userId/bookmark", varifyAuthorization, async (req, res) => {
     const operation = req.query.operation
 
     try {
@@ -98,7 +98,7 @@ router.put("/bookmark", varifyToken, async (req, res) => {
 })
 
 // get user 
-router.get("/:username", async (req, res) => {
+router.get("/:username", varifyToken, async (req, res) => {
     try {
 
         const user = await User.findOne({ username: req.params.username.replace(/-/g, " ") })
@@ -116,16 +116,20 @@ router.get("/:username", async (req, res) => {
 
 //update user
 
-router.put("/:id", async (req, res) => {
+//sent a param name userId
+
+router.put("/:userId", varifyAuthorization, async (req, res) => {
 
     try {
+
         const user = await User.findByIdAndUpdate(
-            req.params.id,
+            req.params.userId,
             {
                 $set: req.body
             },
             { new: true })
         res.status(200).json(user)
+
 
     }
     catch (err) {
@@ -137,7 +141,7 @@ router.put("/:id", async (req, res) => {
 
 // update Intrests
 
-// a query named operation and a object named data must be sent to update intrests [ "add" /"delete"]
+// a query named operation , a param name userId and a object named data must be sent to update intrests [ "add" /"delete"]
 
 // format will be as below
 
@@ -145,7 +149,7 @@ router.put("/:id", async (req, res) => {
 //     "data":"honey"
 // }
 
-router.put("/intrests/:id", async (req, res) => {
+router.put("/:userId/intrests", varifyAuthorization, async (req, res) => {
 
     const operation = req.query.operation
 
@@ -155,7 +159,7 @@ router.put("/intrests/:id", async (req, res) => {
 
         if (operation === "add") {
             user = await User.findByIdAndUpdate(
-                req.params.id,
+                req.params.userId,
                 {
                     $addToSet: { intrests: req.body.data },
                 },

@@ -15,5 +15,16 @@ const varifyToken = (req, res, next) => {
 }
 
 
+const varifyAuthorization = (req, res, next) => {
+    varifyToken(req, res, () => {
+        if (req.user.id === req.params.userId) {
+            next()
+        }
+        else {
+            return res.status(403).json("You are not allowed to do that")
+        }
+    })
+}
 
-module.exports = { varifyToken }
+
+module.exports = { varifyToken, varifyAuthorization }

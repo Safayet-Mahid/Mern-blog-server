@@ -1,6 +1,5 @@
 const Blog = require("../models/Blog")
 const User = require("../models/User")
-const getRandomBlog = require("../operations/getRandomBlog")
 
 const { varifyToken } = require('../routes/varify')
 const getFeedBlogsOfUserIntrests = require("../operations/getFeedBlogsOfUserIntrests")
@@ -10,7 +9,7 @@ const getFeedBlogsBasedOnUserFollowings = require("../operations/getFeedBlogsBas
 const router = require("express").Router()
 
 // based on user intrests 
-// aquery name operation must be sent with value intrests / followings
+// a query name operation must be sent with value intrests / followings
 
 router.get("/", varifyToken, async (req, res) => {
 

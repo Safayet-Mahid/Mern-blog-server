@@ -72,21 +72,27 @@ router.delete("/:blogId", varifyToken, async (req, res) => {
 
 
 // get blog post
+
+//sent a param name blogId
+
 router.get("/find/:blogId", async (req, res) => {
 
     try {
-        // const blog = await Blog.findOne({ _id: req.params.blogId })
-        const title = req.params.blogId.replace(/-/g, " ") // send a dashed title to look good in url route
-        const blog = await Blog.findOne({ title: title })
+
+        const blog = await Blog.findById(req.params.blogId)
 
 
         // related blog with same topics 
         const allBlog = await Blog.find({})
         const relatedBlog = getRelatedBlogs(blog, allBlog)
 
+        //other blogs of the same auther
+        let autherAllBlogs = await Blog.find({ author: blog.author })
 
+        // trim the main blog that the user orginally requested for 
+        const autherOtherBlogs = autherAllBlogs.filter(sBlog => sBlog.id !== blog.id).reverse()
 
-        res.status(201).json({ blog, relatedBlog })
+        res.status(201).json({ blog, relatedBlog, autherOtherBlogs })
 
     }
     catch (err) {
@@ -95,17 +101,5 @@ router.get("/find/:blogId", async (req, res) => {
 
 })
 
-// find blog post of same author
-
-router.get("/find/", async (req, res) => {
-    const author = req.query.author
-    try {
-
-        const blogs = await Blog.find({ author })
-        res.status(201).json(blogs)
-    } catch (err) {
-        res.status(500).json(err)
-    }
-})
 
 module.exports = router
