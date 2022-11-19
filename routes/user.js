@@ -58,6 +58,45 @@ router.put("/following", varifyToken, async (req, res) => {
 })
 
 
+// update bookmarked blogs
+
+// a query named operation must be sent to update intrests [ "follow" /"unfollow"]
+
+router.put("/bookmark", varifyToken, async (req, res) => {
+    const operation = req.query.operation
+
+    try {
+        let user
+        if (operation === "add") {
+            user = await User.findByIdAndUpdate(
+                req.user.id,
+                { $addToSet: { bookmarked: req.body } },
+                { new: true }
+            )
+
+            res.status(200).json(user)
+
+        }
+        else if (operation === "delete") {
+            user = await User.findByIdAndUpdate(
+                req.user.id,
+                {
+                    $pull: { bookmarked: req.body }
+                },
+                { new: true }
+            )
+            res.status(200).json(user)
+        }
+
+
+    }
+
+    catch (err) {
+        res.status(500).json(err)
+    }
+
+})
+
 // get user 
 router.get("/:username", async (req, res) => {
     try {

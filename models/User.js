@@ -21,6 +21,7 @@ const UserSchema = new mongoose.Schema(
         img: { type: String },
         shortBio: { type: String },
         intrests: { type: Array },
+        bookmarked: { type: Object },
         followingList: [
             {
                 _id: false,
