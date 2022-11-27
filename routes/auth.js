@@ -44,7 +44,6 @@ router.post("/login", async (req, res) => {
                 { expiresIn: "3d" }
             )
 
-
             return res.status(201).json({ id: user._id, username: user.username, email: user.email, accessToken })
         } else {
             return res.status(401).json("password is incorrect")

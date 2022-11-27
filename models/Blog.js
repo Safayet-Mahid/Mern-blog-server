@@ -9,9 +9,9 @@ const BlogSchema = new mongoose.Schema({
     authorId: { type: String, required: true },
     category: { type: Array, required: true },
     image: { type: String },
-    title: { type: String, required: true, unique: true },
+    title: { type: String, required: true },
     readingTime: { type: String },
-    content: { type: String }
+    content: { type: String, required: true }
 
 
 },

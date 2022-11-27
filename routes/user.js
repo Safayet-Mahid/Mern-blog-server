@@ -1,4 +1,5 @@
 const router = require("express").Router()
+const Blog = require("../models/Blog")
 const User = require("../models/User")
 const { varifyToken, varifyAuthorization } = require("./varify")
 
@@ -98,17 +99,23 @@ router.put("/:userId/bookmark", varifyAuthorization, async (req, res) => {
 })
 
 // get user 
-router.get("/:username", varifyToken, async (req, res) => {
+router.get("/:userId", varifyToken, async (req, res) => {
     try {
 
-        const user = await User.findOne({ username: req.params.username.replace(/-/g, " ") })
-        res.status(200).json(user)
+        const user = await User.findById(req.params.userId)
+
+        // blogs of the user as author 
+        const blogs = await Blog.find({ author: user.username })
+
+        res.status(200).json({ user, blogs })
+
 
     }
     catch (err) {
         res.status(500).json(err)
     }
 })
+
 
 
 
@@ -139,15 +146,6 @@ router.put("/:userId", varifyAuthorization, async (req, res) => {
 })
 
 
-// update Intrests
-
-// a query named operation , a param name userId and a object named data must be sent to update intrests [ "add" /"delete"]
-
-// format will be as below
-
-// {
-//     "data":"honey"
-// }
 
 router.put("/:userId/intrests", varifyAuthorization, async (req, res) => {
 
